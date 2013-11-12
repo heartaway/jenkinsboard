@@ -1,4 +1,5 @@
 jenkinsboard
 ============
 
-web app dashboard for jenkins .
+Web app dashboard for jenkins .
+Plugins for aone2 so far.
