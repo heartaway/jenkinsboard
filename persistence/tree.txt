@@ -1,0 +1,77 @@
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] org.mortbay.jetty: checking for updates from central
+[INFO] org.codehaus.cargo: checking for updates from central
+[INFO] com.taobao.itest: checking for updates from central
+[INFO] org.apache.maven.plugins: checking for updates from central
+[INFO] org.codehaus.mojo: checking for updates from central
+[INFO] ------------------------------------------------------------------------
+[INFO] Building ewall persistence
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[INFO] snapshot com.taobao.tae:ewall-model:1.0.0-SNAPSHOT: checking for updates from snapshots
+[INFO] [dependency:tree {execution: default-cli}]
+[INFO] com.taobao.tae:ewall-persistence:jar:1.0.0-SNAPSHOT
+[INFO] +- com.alibaba.platform.shared:incubator.persistence.dao:jar:1.0.4:compile
+[INFO] |  +- com.alibaba.external:org.slf4j.slf4j-log4j12:jar:1.5.6:compile
+[INFO] |  +- com.alibaba.external:org.slf4j.slf4j-api:jar:1.5.6:compile
+[INFO] |  +- com.alibaba.external:jakarta.commons.collections:jar:3.2.1:compile
+[INFO] |  +- com.alibaba.external:misc.javassist:jar:3.9.0.GA:compile
+[INFO] |  +- com.alibaba.external:sourceforge.ibatis:jar:2.3.4:compile
+[INFO] |  +- com.alibaba.external:sourceforge.spring:jar:2.5.6:compile
+[INFO] |  |  +- com.alibaba.external:jakarta.commons.logging:jar:0.0.0:compile
+[INFO] |  |  \- com.alibaba.external:sourceforge.cglib:jar:0.0.0:compile
+[INFO] |  |     \- com.alibaba.external:objectweb.asm.attrs:jar:0.0.0:compile
+[INFO] |  |        \- com.alibaba.external:objectweb.asm:jar:0.0.0:compile
+[INFO] |  +- com.alibaba.external:jakarta.commons.io:jar:1.4:compile
+[INFO] |  +- com.alibaba.external:sourceforge.hsqldb:jar:0.0.0:compile
+[INFO] |  +- com.alibaba.external:sourceforge.c3p0:jar:0.9.1:compile
+[INFO] |  |  \- com.alibaba.external:sourceforge.c3p0.oracle:jar:0.9.1:compile
+[INFO] |  \- com.alibaba.external:jakarta.log4j:jar:0.0.0:compile
+[INFO] +- com.taobao.tae:ewall-model:jar:1.0.0-SNAPSHOT:compile
+[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.2.2:compile
+[INFO] |  |  +- org.apache.httpcomponents:httpcore:jar:4.2.2:compile
+[INFO] |  |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |  +- com.google.guava:guava:jar:13.0.1:compile
+[INFO] |  +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] |  +- com.taobao.tae:tae-common-util:jar:1.0.9:compile
+[INFO] |  |  +- ant:ant:jar:1.6.5:compile
+[INFO] |  |  \- org.codehaus.jackson:jackson-mapper-lgpl:jar:1.8.8:compile
+[INFO] |  |     \- org.codehaus.jackson:jackson-core-lgpl:jar:1.8.8:compile
+[INFO] |  \- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.11:compile
+[INFO] |     \- org.codehaus.jackson:jackson-core-asl:jar:1.9.11:compile
+[INFO] +- commons-dbcp:commons-dbcp:jar:1.4:compile
+[INFO] |  \- commons-pool:commons-pool:jar:1.5.4:compile
+[INFO] +- jdbc.mysql:mysql-connector:jar:5.1.5:compile
+[INFO] +- com.taobao.security:ibatis:jar:2.3.4.726.bugfix:compile
+[INFO] +- junit:junit:jar:4.9:compile
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.1:compile
+[INFO] \- com.taobao.test:itest:jar:1.3-SNAPSHOT:compile
+[INFO]    +- org.hamcrest:hamcrest-all:jar:1.1:compile
+[INFO]    +- org.dbunit:dbunit:jar:2.4.4:compile
+[INFO]    +- org.apache.poi:poi:jar:3.2-FINAL:compile
+[INFO]    +- org.springframework:spring-test:jar:3.0.5.RELEASE:test (version managed from 2.5.6; scope managed from compile)
+[INFO]    +- log4j:log4j:jar:1.2.14:compile
+[INFO]    +- org.slf4j:slf4j-api:jar:1.6.1:compile
+[INFO]    +- org.slf4j:jcl-over-slf4j:jar:1.6.1:compile
+[INFO]    +- org.slf4j:slf4j-log4j12:jar:1.6.1:compile
+[INFO]    +- commons-logging:commons-logging:jar:99.0-does-not-exist:compile
+[INFO]    +- commons-io:commons-io:jar:1.3.2:compile
+[INFO]    +- commons-beanutils:commons-beanutils:jar:1.8.0:compile
+[INFO]    +- commons-collections:commons-collections:jar:3.2.1:compile
+[INFO]    +- org.unitils:unitils-core:jar:3.1:compile
+[INFO]    |  \- ognl:ognl:jar:2.6.9:compile
+[INFO]    +- org.aspectj:aspectjrt:jar:1.6.9:compile
+[INFO]    +- org.aspectj:aspectjweaver:jar:1.6.9:compile
+[INFO]    +- com.oracle:ojdbc14:jar:10.2.0.3.0:compile
+[INFO]    +- mysql:mysql-connector-java:jar:5.1.6:compile
+[INFO]    +- org.htmlparser:htmlparser:jar:1.6:compile
+[INFO]    +- commons-httpclient:commons-httpclient:jar:3.0.1:compile
+[INFO]    \- org.codehaus.groovy:groovy-all:jar:1.7.6:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 5 seconds
+[INFO] Finished at: Mon Dec 02 15:47:15 CST 2013
+[INFO] Final Memory: 28M/332M
+[INFO] ------------------------------------------------------------------------

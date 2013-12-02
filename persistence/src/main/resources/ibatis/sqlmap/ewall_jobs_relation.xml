@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.taobao.tae.ewall.job.JobsRelationDO">
+    <typeAlias alias="jobsRelationDO" type="com.taobao.tae.ewall.job.JobsRelationDO"/>
+    <resultMap id="jobsRelationDO.rm" class="jobsRelationDO">
+        <result column="id" property="id"/>
+        <result column="pipeline_id" property="pipelineId"/>
+        <result column="job_id" property="jobId"/>
+        <result column="up_stream_jobs" property="upStreamJobs"/>
+        <result column="down_stream_jobs" property="downStreamJobs"/>
+
+        <result column="features" property="features"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <!-- selector -->
+    <sql id="jobsRelationDO.selector">
+		SELECT
+		id, pipeline_id, job_id, up_stream_jobs, down_stream_jobs, features, description
+		FROM jobs_relation
+    </sql>
+    <!-- END selector -->
+
+    <!-- counter -->
+    <sql id="jobsRelationDO.counter">
+		SELECT COUNT(*) FROM jobs_relation
+    </sql>
+    <!-- END counter -->
+
+    <!-- 条件片段 -->
+    <sql id="jobsRelationDO.get_segment">
+        <dynamic prepend="WHERE">
+            <isNotNull prepend="AND" property="id">
+                id = #id#
+            </isNotNull>
+            <isNotNull prepend="AND" property="pipelineId">
+                pipeline_id = #pipelineId#
+            </isNotNull>
+            <isNotNull prepend="AND" property="jobId">
+                job_id = #jobId#
+            </isNotNull>
+            <isNotNull prepend="AND" property="upStreamJobs">
+                up_stream_jobs = #upStreamJobs#
+            </isNotNull>
+            <isNotNull prepend="AND" property="downStreamJobs">
+                down_stream_jobs = #downStreamJobs#
+            </isNotNull>
+            <isNotNull prepend="AND" property="features">
+                features = #features#
+            </isNotNull>
+            <isNotNull prepend="AND" property="description">
+                description = #description#
+            </isNotNull>
+        </dynamic>
+    </sql>
+
+    <!-- INSERT -->
+    <insert id="create" parameterClass="jobsRelationDO">
+        INSERT INTO jobs_relation(
+        pipeline_id, job_id, up_stream_jobs, down_stream_jobs, features, description, gmt_create, gmt_modified)
+        VALUES(
+        #pipelineId#, #jobId#, #upStreamJobs#, #downStreamJobs#, #features#, #description#, now(), now())
+        <selectKey resultClass="int" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <!-- ENE INSERT -->
+
+    <!--更新 -->
+    <update id="update" parameterClass="jobsRelationDO">
+        UPDATE jobs_relation
+        set gmt_modified = now()
+        <dynamic>
+            <isNotNull prepend="," property="pipelineId">
+                pipeline_id = #pipelineId#
+            </isNotNull>
+            <isNotNull prepend="," property="jobId">
+                job_id = #jobId#
+            </isNotNull>
+            <isNotNull prepend="," property="upStreamJobs">
+                up_stream_jobs = #upStreamJobs#
+            </isNotNull>
+            <isNotNull prepend="," property="downStreamJobs">
+                down_stream_jobs = #downStreamJobs#
+            </isNotNull>
+            <isNotNull prepend="," property="features">
+                features = #features#
+            </isNotNull>
+            <isNotNull prepend="," property="description">
+                description = #description#
+            </isNotNull>
+        </dynamic>
+        where id = #id#
+    </update>
+
+    <!-- GET -->
+    <select id="load" resultMap="jobsRelationDO.rm">
+        <include refid="jobsRelationDO.selector"/>
+        WHERE ID = #id#
+    </select>
+
+    <select id="find" parameterClass="jobsRelationDO" resultMap="jobsRelationDO.rm">
+        <include refid="jobsRelationDO.selector"/>
+        <include refid="jobsRelationDO.get_segment"/>
+    </select>
+    <!-- END GET -->
+
+    <!-- END 分页筛选 -->
+
+    <!-- 删除 -->
+    <delete id="delete" parameterClass="int">
+    	DELETE FROM jobs_relation where id = #id#
+    </delete>
+    <!-- END 删除 -->
+
+    <!-- 分页筛选 -->
+    <select id="page_count" resultClass="Integer">
+        <include refid="jobsRelationDO.counter"/>
+        <include refid="jobsRelationDO.get_segment"/>
+    </select>
+
+    <select id="page" resultClass="Integer" resultMap="jobsRelationDO.rm">
+        <include refid="jobsRelationDO.selector"/>
+        <include refid="jobsRelationDO.get_segment"/>
+        LIMIT #query_page_index#, #query_page_size#;
+    </select>
+    <!-- END 分页筛选 -->
+</sqlMap>
+
