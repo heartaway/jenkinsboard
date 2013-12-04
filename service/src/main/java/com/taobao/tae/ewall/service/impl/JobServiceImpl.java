@@ -3,6 +3,7 @@ package com.taobao.tae.ewall.service.impl;
 import com.taobao.tae.ewall.dao.JobDao;
 import com.taobao.tae.ewall.job.JobDO;
 import com.taobao.tae.ewall.service.JobService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,29 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobDO> getAllJobs() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        JobDO jobDO = new JobDO();
+        List<JobDO> result = jobDao.find(jobDO);
+        return result;
+    }
+
+    @Override
+    public Boolean deleteById(Integer id) {
+        return jobDao.delete(id);
+    }
+
+    @Override
+    public Integer addJob(JobDO jobDO) {
+        if (jobDO == null || StringUtils.isBlank(jobDO.getName()) || StringUtils.isBlank(jobDO.getName())) {
+            return -1;
+        }
+        return jobDao.create(jobDO);
+    }
+
+    @Override
+    public Boolean updateJob(JobDO jobDO) {
+        if (jobDO == null || StringUtils.isBlank(jobDO.getName()) || StringUtils.isBlank(jobDO.getName())) {
+            return false;
+        }
+        return jobDao.update(jobDO);
     }
 }

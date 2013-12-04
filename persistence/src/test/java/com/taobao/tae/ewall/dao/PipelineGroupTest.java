@@ -29,10 +29,8 @@ public class PipelineGroupTest  extends ITestSpringContextBaseCase {
         pipelineGroupDao.delete(gourpId);
         PipelineGroupDO prototype = generatePipelineGroup();
         Assert.assertEquals(prototype.getName(), result.getName());
-        Assert.assertEquals(prototype.getName(), result.getName());
         Assert.assertEquals(prototype.getDescription(), result.getDescription());
     }
-
 
 
     private Integer createPipelineGroup() {

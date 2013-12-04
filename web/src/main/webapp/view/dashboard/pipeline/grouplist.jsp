@@ -11,11 +11,11 @@
     <div class="row-fluid">
         <div class="box span12">
             <div class="box-header" data-original-title="">
-                <h2><i class="icon-align-justify"></i><span class="break"></span>Jobs</h2>
+                <h2><i class="icon-align-justify"></i><span class="break"></span>Pipeline Groups</h2>
 
                 <div class="box-icon">
-                    <a href="#job_add"  data-toggle="modal"  class="btn-setting"><i class="icon-plus"></i></a>
-                    <a href="#job_setting"  data-toggle="modal"  class="btn-setting"><i class="icon-wrench"></i></a>
+                    <a href="#group_add" data-toggle="modal" class="btn-setting"><i class="icon-plus"></i></a>
+                    <a href="#group_setting" data-toggle="modal" class="btn-setting"><i class="icon-wrench"></i></a>
                     <a href="#" class="btn-minimize"><i class="icon-chevron-up"></i></a>
                     <a href="#" class="btn-close"><i class="icon-remove"></i></a>
                 </div>
@@ -24,64 +24,45 @@
                 <table class="table table-striped table-bordered bootstrap-datatable datatable">
                     <thead>
                     <tr>
-                        <th>Job name</th>
-                        <th>Jenkins home</th>
-                        <th>Job type</th>
-                        <th>Job status</th>
+                        <th>Group name</th>
+                        <th>Description</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="job" items="${joblist}">
+                    <c:forEach var="group" items="${grouplist}">
                         <tr>
-                            <td>${job.getName()}</td>
-                            <td class="center">${job.getJenkinsURL()}</td>
-                            <td class="center">${job.getJobType()}</td>
+                            <td>${group.getName()}</td>
+                            <td class="center">${group.getDescription()}</td>
                             <td class="center">
-                                <span class="label">${job.getStatus()}</span>
-                            </td>
-                            <td class="center">
-                                <a data-toggle="modal" class="btn btn-success" href="#">
-                                    <i class="icon-zoom-in "></i>
-                                </a>
-                                <a data-toggle="modal" class="btn btn-info" href="#job_edit_${job.getId()}">
+                                <a data-toggle="modal" class="btn btn-info" href="#group_edit_${group.getId()}">
                                     <i class="icon-edit "></i>
                                 </a>
-                                <a data-toggle="modal" class="btn btn-danger" href="#job_delete_${job.getId()}">
+                                <a data-toggle="modal" class="btn btn-danger" href="#group_delete_${group.getId()}">
                                     <i class="icon-trash "></i>
                                 </a>
                             </td>
                         </tr>
 
 
-                        <!-- Job eidt -->
-                        <div class="modal hide fade" id="job_edit_${job.getId()}">
+                        <!-- Group eidt -->
+                        <div class="modal hide fade" id="group_edit_${group.getId()}">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">×</button>
                                 <h3>Edit</h3>
                             </div>
-                            <form class="form-default" method="post" action="/dashboard/job/edit">
+                            <form class="form-default" method="post" action="/dashboard/pipeline/groupedit">
                                 <div class="modal-body">
 
-                                    <input type="hidden" name="id" value="${job.getId()}"/>
+                                    <input type="hidden" name="id" value="${group.getId()}"/>
 
                                     <p>
-                                        <span class="span3">Job name:</span>
-                                        <input type="text" name="name" value="${job.getName()}"/>
+                                        <span class="span3">Group name:</span>
+                                        <input type="text" name="name" value="${group.getName()}"/>
                                     </p>
 
-                                    <p><span class="span3">Jenkins home:</span>
-                                        <input type="text" name="jenkinsURL" value="${job.getJenkinsURL()}"/>
-                                    </p>
-
-                                    <p><span class="span3">Job type:</span>
-                                        <input type="text" name="jobType" value="${job.getJobType()}"/></p>
-
-                                    <p><span class="span3">Job status:</span>
-                                        <input type="text" name="status" value="${job.getStatus()}"/></p>
-
-                                    <p><span class="span3">Job description:</span>
-                                        <input type="text" name="description" value="${job.getDescription()}"/>
+                                    <p><span class="span3">Group description:</span>
+                                        <input type="text" name="description" value="${group.getDescription()}"/>
                                     </p>
 
                                 </div>
@@ -92,18 +73,18 @@
                             </form>
                         </div>
 
-                        <!-- Job delete -->
-                        <div class="modal hide fade" id="job_delete_${job.getId()}">
+                        <!-- Group delete -->
+                        <div class="modal hide fade" id="group_delete_${group.getId()}">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal">×</button>
                                 <h3>Delete</h3>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure delete this job ?</p>
+                                <p>Are you sure delete this group ?</p>
                             </div>
                             <div class="modal-footer">
                                 <a href="#" class="btn" data-dismiss="modal">Close</a>
-                                <a href="/dashboard/job/delete?id=${job.getId()}" class="btn btn-primary">Yes</a>
+                                <a href="/dashboard/pipeline/groupdelete?id=${group.getId()}" class="btn btn-primary">Yes</a>
                             </div>
                         </div>
 
@@ -124,8 +105,8 @@
 
 </div><!--/fluid-row-->
 
-<!-- Job List Setting-->
-<div class="modal hide fade" id="job_setting">
+<!-- Group List Setting-->
+<div class="modal hide fade" id="group_setting">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
         <h3>Settings</h3>
@@ -139,31 +120,21 @@
     </div>
 </div>
 
-<!-- Job List Setting-->
-<div class="modal hide fade" id="job_add">
+<!-- Group List Setting-->
+<div class="modal hide fade" id="group_add">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>Add Job</h3>
+        <h3>Add Group</h3>
     </div>
-    <form class="form-default" method="post" action="/dashboard/job/add">
+    <form class="form-default" method="post" action="/dashboard/pipeline/groupadd">
         <div class="modal-body">
 
             <p>
-                <span class="span2">Job name:</span>
+                <span class="span2">Group name:</span>
                 <input type="text" name="name" value=""/>
             </p>
 
-            <p><span class="span2">Jenkins home:</span>
-                <input type="text" name="jenkinsURL" value=""/>
-            </p>
-
-            <p><span class="span2">Job type:</span>
-                <input type="text" name="jobType" value=""/></p>
-
-            <p><span class="span2">Job status:</span>
-                <input type="text" name="status" value=""/></p>
-
-            <p><span class="span2">Job description:</span>
+            <p><span class="span2">Group description:</span>
                 <input type="text" name="description" value=""/>
             </p>
 

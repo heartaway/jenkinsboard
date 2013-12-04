@@ -13,7 +13,7 @@
     <sql id="pipelineGroupDO.selector">
 		SELECT
 		id, name, features, description
-		FROM pipeline
+		FROM pipeline_group
     </sql>
     <!-- END selector -->
 
@@ -85,7 +85,7 @@
 
 
     <delete id="delete" parameterClass="int">
-    	DELETE FROM pipeline where id = #id#
+    	DELETE FROM pipeline_group where id = #id#
     </delete>
 
 

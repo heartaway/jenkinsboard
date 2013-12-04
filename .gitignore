@@ -1,1 +1,7 @@
 /.idea
+*.iml
+/jenkins/target/
+/model/target/
+/persistence/target/
+/service/target/
+/web/target/
