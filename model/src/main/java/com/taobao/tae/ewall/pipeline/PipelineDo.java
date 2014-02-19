@@ -18,9 +18,9 @@ public class PipelineDO extends BaseDO {
     private Integer groupId;
 
     /**
-     * pipeline 头 Job Id
+     * pipeline 头 Project Id
      */
-    private Integer headJobId;
+    private Integer headProjectId;
 
     /**
      * 当前 pipeline 描述
@@ -31,6 +31,11 @@ public class PipelineDO extends BaseDO {
      * 特征字段
      */
     private String features;
+
+    /**
+     * 是否展示在Pipelines中
+     */
+    private Boolean display;
 
 
     public Integer getId() {
@@ -57,12 +62,12 @@ public class PipelineDO extends BaseDO {
         this.groupId = groupId;
     }
 
-    public Integer getHeadJobId() {
-        return headJobId;
+    public Integer getHeadProjectId() {
+        return headProjectId;
     }
 
-    public void setHeadJobId(Integer headJobId) {
-        this.headJobId = headJobId;
+    public void setHeadProjectId(Integer headProjectId) {
+        this.headProjectId = headProjectId;
     }
 
     public String getDescription() {
@@ -79,5 +84,13 @@ public class PipelineDO extends BaseDO {
 
     public void setFeatures(String features) {
         this.features = features;
+    }
+
+    public Boolean getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Boolean display) {
+        this.display = display;
     }
 }

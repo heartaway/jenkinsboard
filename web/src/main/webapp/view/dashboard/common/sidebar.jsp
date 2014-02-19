@@ -1,22 +1,50 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
 <!-- start: Main Menu -->
-<div id="sidebar-left" class="span2">
+<div class="sidebar" id="sidebar">
+    <ul class="nav nav-list">
+        <li class="active">
+            <a href="/webfront/testbyhand/index.jsp">
+                <i class="icon-dashboard"></i>
+                <span class="menu-text"> Dashboard </span>
+            </a>
+        </li>
 
-    <div class="row-fluid actions">
 
-        <%--<input type="text" class="search span12" placeholder="..."/>--%>
+        <li>
+            <a href="/dashboard/build/pipelineslastbuild">
+                <i class="icon-gift blue"></i>
+                <span class="menu-text">Pipelines</span>
+            </a>
+        </li>
 
-    </div>
+        <li>
+            <a href="/dashboard/project/projectlist">
+                <i class="icon-cloud green"></i>
+                <span class="menu-text">Original Project</span>
+            </a>
+        </li>
 
-    <div class="nav-collapse sidebar-nav">
-        <ul class="nav nav-tabs nav-stacked main-menu">
-            <li><a href="/"><i class="icon-dashboard"></i><span class="hidden-tablet"> Dashboard</span></a></li>
-            <li><a href="/"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Pipelines</span></a></li>
-            <li><a href="/dashboard/job/joblist"><i class="icon-tasks"></i><span class="hidden-tablet">Original Job</span></a></li>
-            <li><a href="/dashboard/pipeline/grouplist"><i class="icon-sitemap"></i><span class="hidden-tablet">Pipeline Group</span></a>
-            <li><a href="/dashboard/pipeline/pipelinelist"><i class="icon-cogs"></i><span class="hidden-tablet">Pipeline Setting</span></a>
-            </li>
-        </ul>
+        <li>
+            <a href="/dashboard/pipeline/grouplist">
+                <i class="icon-fighter-jet pink"></i>
+                <span class="menu-text">Pipeline Group</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/dashboard/pipeline/pipelinelist">
+                <i class="icon-calendar"></i>
+                <span class="menu-text">Pipeline Setting</span>
+            </a>
+        </li>
+
+    </ul>
+    <!--/.nav-list-->
+
+    <div class="sidebar-collapse" id="sidebar-collapse">
+        <i class="icon-double-angle-left"></i>
     </div>
 </div>
 <!-- end: Main Menu -->
+<!-- .main-content  should start -->
+<div class="main-content">

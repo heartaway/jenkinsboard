@@ -37,7 +37,7 @@ public class Computer extends BaseModel {
     }
 
     public ComputerWithDetails details() throws IOException {
-        return client.get("/computer/" + displayName.replaceAll("master", "(master)"), ComputerWithDetails.class);
+        return client.getApi("/computer/" + displayName.replaceAll("master", "(master)"), ComputerWithDetails.class);
     }
 
     private static class MapEntryToQueryStringPair implements Function<Map.Entry<String, String>, String> {

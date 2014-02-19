@@ -6,15 +6,16 @@
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="group_id" property="groupId"/>
-        <result column="head_job_id" property="headJobId"/>
+        <result column="head_project_id" property="headProjectId"/>
         <result column="features" property="features"/>
         <result column="description" property="description"/>
+        <result column="display" property="display"/>
     </resultMap>
 
     <!-- selector -->
     <sql id="pipelineDO.selector">
 		SELECT
-		id, name, group_id, head_job_id, features, description
+		id, name, group_id, head_project_id, features, description,display
 		FROM pipeline
     </sql>
     <!-- END selector -->
@@ -37,8 +38,8 @@
             <isNotNull prepend="AND" property="groupId">
                 group_id = #groupId#
             </isNotNull>
-            <isNotNull prepend="AND" property="headJobId">
-                head_job_id = #headJobId#
+            <isNotNull prepend="AND" property="headProjectId">
+                head_project_id = #headProjectId#
             </isNotNull>
             <isNotNull prepend="AND" property="features">
                 features = #features#
@@ -46,15 +47,18 @@
             <isNotNull prepend="AND" property="description">
                 description = #description#
             </isNotNull>
+            <isNotNull prepend="AND" property="display">
+                display = #display#
+            </isNotNull>
         </dynamic>
     </sql>
 
     <!-- INSERT -->
     <insert id="create" parameterClass="pipelineDO">
         INSERT INTO pipeline(
-        name, group_id, head_job_id, features, description, gmt_create, gmt_modified)
+        name, group_id, head_project_id, features, description, display,gmt_create, gmt_modified)
         VALUES(
-        #name#, #groupId#, #headJobId#, #features#, #description#, now(), now())
+        #name#, #groupId#, #headProjectId#, #features#, #description#,#display#, now(), now())
         <selectKey resultClass="int" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -72,14 +76,17 @@
             <isNotNull prepend="," property="groupId">
                 group_id = #groupId#
             </isNotNull>
-            <isNotNull prepend="," property="headJobId">
-                head_job_id = #headJobId#
+            <isNotNull prepend="," property="headProjectId">
+                head_project_id = #headProjectId#
             </isNotNull>
             <isNotNull prepend="," property="features">
                 features = #features#
             </isNotNull>
             <isNotNull prepend="," property="description">
                 description = #description#
+            </isNotNull>
+            <isNotNull prepend="," property="display">
+                display = #display#
             </isNotNull>
         </dynamic>
         where id = #id#

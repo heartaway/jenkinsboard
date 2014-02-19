@@ -1,6 +1,5 @@
 package com.taobao.tae.ewall.service.impl;
 
-import com.taobao.tae.ewall.dao.JobDao;
 import com.taobao.tae.ewall.dao.PipelineGroupDao;
 import com.taobao.tae.ewall.pipeline.PipelineGroupDO;
 import com.taobao.tae.ewall.service.PipelineGroupService;

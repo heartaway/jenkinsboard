@@ -6,10 +6,10 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <!-- Connection Info -->
-        <property name="driverClassName" value="${ewall.jdbc.driver}" />
-        <property name="url" value="${ewall.jdbc.url}" />
-        <property name="username" value="${ewall.jdbc.username}" />
-        <property name="password" value="${ewall.jdbc.password}" />
+        <property name="driverClassName" value="${ewall.jdbc.driver}"/>
+        <property name="url" value="${ewall.jdbc.url}"/>
+        <property name="username" value="${ewall.jdbc.username}"/>
+        <property name="password" value="${ewall.jdbc.password}"/>
     </bean>
 
     <!-- persistence provider for ibatis -->
@@ -49,12 +49,12 @@
         <property name="configLocation" value="classpath:ibatis/ewall-sqlmap-config.xml"/>
     </bean>
 
-    <bean id="jobDao" p:target="com.taobao.tae.ewall.dao.JobDao" parent="baseDao"/>
-
-    <bean id="jobsRelationDao" p:target="com.taobao.tae.ewall.dao.JobsRelationDao" parent="baseDao"/>
-
+    <bean id="projectDao" p:target="com.taobao.tae.ewall.dao.ProjectDao" parent="baseDao"/>
     <bean id="pipelineDao" p:target="com.taobao.tae.ewall.dao.PipelineDao" parent="baseDao"/>
-
-    <bean id="pipelineGroupDao" p:target="com.taobao.tae.ewall.dao.PipelineGroupDao" parent="baseDao" />
+    <bean id="pipelineGroupDao" p:target="com.taobao.tae.ewall.dao.PipelineGroupDao" parent="baseDao"/>
+    <bean id="buildProjectDao" p:target="com.taobao.tae.ewall.dao.BuildProjectDao" parent="baseDao"/>
+    <bean id="buildPipelineDao" p:target="com.taobao.tae.ewall.dao.BuildPipelineDao" parent="baseDao"/>
+    <bean id="buildTestReportDao" p:target="com.taobao.tae.ewall.dao.BuildTestReportDao" parent="baseDao"/>
+    <bean id="resourcesLockDao" p:target="com.taobao.tae.ewall.dao.ResourcesLockDao" parent="baseDao"/>
 
 </beans>

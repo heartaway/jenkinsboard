@@ -6,9 +6,12 @@
     <settings cacheModelsEnabled="true" enhancementEnabled="true" lazyLoadingEnabled="false"
               useStatementNamespaces="true"/>
 
-    <sqlMap resource="ibatis/sqlmap/ewall_job.xml"/>
-    <sqlMap resource="ibatis/sqlmap/ewall_jobs_relation.xml"/>
+    <sqlMap resource="ibatis/sqlmap/ewall_project.xml"/>
     <sqlMap resource="ibatis/sqlmap/ewall_pipeline.xml"/>
     <sqlMap resource="ibatis/sqlmap/ewall_pipeline_group.xml"/>
+    <sqlMap resource="ibatis/sqlmap/ewall_build_project.xml"/>
+    <sqlMap resource="ibatis/sqlmap/ewall_build_pipeline.xml"/>
+    <sqlMap resource="ibatis/sqlmap/ewall_build_test_report.xml"/>
+    <sqlMap resource="ibatis/sqlmap/ewall_resources_lock.xml"/>
 
 </sqlMapConfig>

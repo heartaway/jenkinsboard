@@ -27,6 +27,6 @@ public class Build extends BaseModel {
     }
 
     public BuildWithDetails details() throws IOException {
-        return client.get(url, BuildWithDetails.class);
+        return client.getApi(url, BuildWithDetails.class);
     }
 }

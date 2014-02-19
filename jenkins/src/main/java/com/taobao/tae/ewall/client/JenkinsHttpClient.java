@@ -8,10 +8,13 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -44,7 +47,10 @@ public class JenkinsHttpClient {
         }
         this.uri = uri;
         this.mapper = getDefaultMapper();
-        this.client = new DefaultHttpClient();
+        DefaultHttpClient client = new DefaultHttpClient();
+        ClientConnectionManager mgr = client.getConnectionManager();
+        HttpParams params = client.getParams();
+        this.client = new DefaultHttpClient(new ThreadSafeClientConnManager(params,mgr.getSchemeRegistry()), params);
     }
 
     /**
@@ -77,7 +83,7 @@ public class JenkinsHttpClient {
      * @return an instance of the supplied class
      * @throws java.io.IOException, HttpResponseException
      */
-    public <T extends BaseModel> T get(String path, Class<T> cls) throws IOException, HttpResponseException {
+    public <T extends BaseModel> T getApi(String path, Class<T> cls) throws IOException, HttpResponseException {
         HttpResponse response = client.execute(new HttpGet(api(path)), localContext);
         int status = response.getStatusLine().getStatusCode();
         if (status < 200 || status >= 300) {
@@ -97,8 +103,23 @@ public class JenkinsHttpClient {
      * @return the entity text
      * @throws java.io.IOException, HttpResponseException
      */
-    public String get(String path) throws IOException, HttpResponseException {
+    public String getApi(String path) throws IOException, HttpResponseException {
         HttpResponse response = client.execute(new HttpGet(api(path)), localContext);
+        int status = response.getStatusLine().getStatusCode();
+        if (status < 200 || status >= 300) {
+            throw new HttpResponseException(status, response.getStatusLine().getReasonPhrase());
+        }
+        Scanner s = new Scanner(response.getEntity().getContent());
+        s.useDelimiter("\\z");
+        StringBuffer sb = new StringBuffer();
+        while (s.hasNext()) {
+            sb.append(s.next());
+        }
+        return sb.toString();
+    }
+
+    public String get(String path) throws IOException, HttpResponseException {
+        HttpResponse response = client.execute(new HttpGet(path), localContext);
         int status = response.getStatusLine().getStatusCode();
         if (status < 200 || status >= 300) {
             throw new HttpResponseException(status, response.getStatusLine().getReasonPhrase());
@@ -139,7 +160,7 @@ public class JenkinsHttpClient {
      * @return an instance of the supplied class
      * @throws java.io.IOException, HttpResponseException
      */
-    public <R extends BaseModel, D> R post(String path, D data, Class<R> cls) throws IOException, HttpResponseException {
+    public <R extends BaseModel, D> R postApi(String path, D data, Class<R> cls) throws IOException, HttpResponseException {
         HttpPost request = new HttpPost(api(path));
         if (data != null) {
             StringEntity stringEntity = new StringEntity(mapper.writeValueAsString(data), "application/json");
@@ -149,9 +170,49 @@ public class JenkinsHttpClient {
         int status = response.getStatusLine().getStatusCode();
 
         try {
-			if (status < 200 || status >= 300) {
-				throw new HttpResponseException(status, response.getStatusLine().getReasonPhrase());
-			}
+            if (status < 200 || status >= 300) {
+                throw new HttpResponseException(status, response.getStatusLine().getReasonPhrase());
+            }
+
+            if (cls != null) {
+                return objectFromResponse(cls, response);
+            } else {
+                return null;
+            }
+        } finally {
+            EntityUtils.consume(response.getEntity());
+        }
+    }
+
+
+    public void post(String path) throws IOException, HttpResponseException {
+        post(path, null, null);
+    }
+
+    /**
+     * Perform a POST request and parse the response to the given class
+     *
+     * @param path path to request, can be relative or absolute
+     * @param data data to post
+     * @param cls  class of the response
+     * @param <R>  type of the response
+     * @param <D>  type of the data
+     * @return an instance of the supplied class
+     * @throws java.io.IOException, HttpResponseException
+     */
+    public <R extends BaseModel, D> R post(String path, D data, Class<R> cls) throws IOException, HttpResponseException {
+        HttpPost request = new HttpPost(path);
+        if (data != null) {
+            StringEntity stringEntity = new StringEntity(mapper.writeValueAsString(data), "application/json");
+            request.setEntity(stringEntity);
+        }
+        HttpResponse response = client.execute(request, localContext);
+        int status = response.getStatusLine().getStatusCode();
+
+        try {
+            if (status < 200 || status >= 300) {
+                throw new HttpResponseException(status, response.getStatusLine().getReasonPhrase());
+            }
 
             if (cls != null) {
                 return objectFromResponse(cls, response);
@@ -166,7 +227,7 @@ public class JenkinsHttpClient {
     /**
      * Perform a POST request of XML (instead of using json mapper) and return a string rendering of the response entity.
      *
-     * @param path path to request, can be relative or absolute
+     * @param path     path to request, can be relative or absolute
      * @param xml_data data to post
      * @return A string containing the xml response (if present)
      * @throws java.io.IOException, HttpResponseException
@@ -185,7 +246,7 @@ public class JenkinsHttpClient {
             InputStream content = response.getEntity().getContent();
             Scanner s = new Scanner(content);
             StringBuffer sb = new StringBuffer();
-            while(s.hasNext()) {
+            while (s.hasNext()) {
                 sb.append(s.next());
             }
             return sb.toString();
@@ -200,8 +261,8 @@ public class JenkinsHttpClient {
      * @param path path to request
      * @throws java.io.IOException, HttpResponseException
      */
-    public void post(String path) throws IOException, HttpResponseException {
-        post(path, null, null);
+    public void postApi(String path) throws IOException, HttpResponseException {
+        postApi(path, null, null);
     }
 
     private String urlJoin(String path1, String path2) {
@@ -240,5 +301,9 @@ public class JenkinsHttpClient {
         DeserializationConfig deserializationConfig = mapper.getDeserializationConfig();
         mapper.setDeserializationConfig(deserializationConfig.without(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES));
         return mapper;
+    }
+
+    public String getUrl() {
+        return this.uri.toString();
     }
 }

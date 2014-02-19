@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.taobao.tae.ewall.build.BuildTestReportDO">
+    <typeAlias alias="buildTestReportDO" type="com.taobao.tae.ewall.build.BuildTestReportDO"/>
+    <resultMap id="buildTestReportDO.rm" class="buildTestReportDO">
+        <result column="id" property="id"/>
+        <result column="number" property="number"/>
+        <result column="total_count" property="totalCount"/>
+        <result column="skip_count" property="skipCount"/>
+        <result column="url" property="url"/>
+        <result column="fail_count" property="failCount"/>
+        <result column="duration" property="duration"/>
+        <result column="suites" property="suites"/>
+    </resultMap>
+
+    <!-- selector -->
+    <sql id="buildTestReportDO.selector">
+		SELECT
+		id, number, total_count, skip_count,url,fail_count,duration,, suites
+		FROM build_test_report
+    </sql>
+    <!-- END selector -->
+
+    <!-- counter -->
+    <sql id="buildTestReportDO.counter">
+		SELECT COUNT(*) FROM build_test_report
+    </sql>
+    <!-- END counter -->
+
+    <sql id="buildTestReportDO.get_segment">
+        <dynamic prepend="WHERE">
+            <isNotNull prepend="AND" property="id">
+                id = #id#
+            </isNotNull>
+            <isNotNull prepend="AND" property="number">
+                number = #number#
+            </isNotNull>
+            <isNotNull prepend="AND" property="totalCount">
+                total_count = #totalCount#
+            </isNotNull>
+            <isNotNull prepend="AND" property="skipCount">
+                skip_count = #skipCount#
+            </isNotNull>
+            <isNotNull prepend="AND" property="url">
+                url = #url#
+            </isNotNull>
+            <isNotNull prepend="AND" property="failCount">
+                fail_count = #failCount#
+            </isNotNull>
+            <isNotNull prepend="AND" property="duration">
+                duration = #duration#
+            </isNotNull>
+            <isNotNull prepend="AND" property="suites">
+                suites = #suites#
+            </isNotNull>
+        </dynamic>
+    </sql>
+
+    <!-- INSERT -->
+    <insert id="create" parameterClass="buildTestReportDO">
+        INSERT INTO build_test_report (
+        number, total_count, skip_count,url, fail_count,duration, suites, gmt_create, gmt_modified)
+        VALUES(
+        #number#, #totalCount#, #skipCount#,#url#,#failCount#,#duration#, #suites#, now(), now())
+        <selectKey resultClass="long" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <!-- ENE INSERT -->
+
+    <!--鏇存柊 -->
+    <update id="update" parameterClass="buildTestReportDO">
+        UPDATE build_test_report
+        set gmt_modified = now()
+        <dynamic>
+            <isNotNull prepend="," property="number">
+                number = #number#
+            </isNotNull>
+            <isNotNull prepend="," property="totalCount">
+                total_count = #totalCount#
+            </isNotNull>
+            <isNotNull prepend="," property="skipCount">
+                skip_count = #skipCount#
+            </isNotNull>
+            <isNotNull prepend="," property="url">
+                url = #url#
+            </isNotNull>
+            <isNotNull prepend="," property="duration">
+                duration = #duration#
+            </isNotNull>
+            <isNotNull prepend="," property="failCount">
+                fail_count = #failCount#
+            </isNotNull>
+            <isNotNull prepend="," property="suites">
+                suites = #suites#
+            </isNotNull>
+        </dynamic>
+        where id = #id#
+    </update>
+
+    <!-- GET -->
+    <select id="load" resultMap="buildTestReportDO.rm">
+        <include refid="buildTestReportDO.selector"/>
+        WHERE ID = #id#
+    </select>
+
+    <select id="find" parameterClass="buildTestReportDO" resultMap="buildTestReportDO.rm">
+        <include refid="buildTestReportDO.selector"/>
+        <include refid="buildTestReportDO.get_segment"/>
+    </select>
+    <!-- END GET -->
+
+    <delete id="delete" parameterClass="long">
+    	DELETE FROM build_test_report where id = #id#
+    </delete>
+
+    <select id="page_count" resultClass="Integer">
+        <include refid="buildTestReportDO.counter"/>
+        <include refid="buildTestReportDO.get_segment"/>
+    </select>
+
+    <select id="page" resultClass="Integer" resultMap="buildTestReportDO.rm">
+        <include refid="buildTestReportDO.selector"/>
+        <include refid="buildTestReportDO.get_segment"/>
+        LIMIT #query_page_index#, #query_page_size#;
+    </select>
+</sqlMap>
+

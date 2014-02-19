@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="com.taobao.tae.ewall.build.BuildProjectDO">
+    <typeAlias alias="buildProjectDO" type="com.taobao.tae.ewall.build.BuildProjectDO"/>
+    <resultMap id="buildProjectDO.rm" class="buildProjectDO">
+        <result column="id" property="id"/>
+        <result column="project_name" property="projectName"/>
+        <result column="jenkins_project_build_number" property="jenkinsProjectBuildNumber"/>
+        <result column="status" property="status"/>
+        <result column="result" property="result"/>
+        <result column="duration" property="duration"/>
+        <result column="project_id" property="projectId"/>
+        <result column="comment" property="comment"/>
+        <result column="build_pipeline_id" property="buildPipelineId"/>
+        <result column="test_report_id" property="testReportId"/>
+        <result column="code_changes" property="codeChanges"/>
+        <result column="down_stream_projects" property="downStreamProjects"/>
+        <result column="comment" property="comment"/>
+        <result column="description" property="description"/>
+        <result column="gmt_start" property="gmtStart"/>
+        <result column="gmt_end" property="gmtEnd"/>
+    </resultMap>
+
+    <!-- selector -->
+    <sql id="buildProjectDO.selector">
+		SELECT
+		id, project_name,jenkins_project_build_number,status,duration, project_id, build_pipeline_id,result,test_report_id,code_changes, down_stream_projects,comment, description,gmt_start,gmt_end
+		FROM build_project
+    </sql>
+    <!-- END selector -->
+
+    <!-- counter -->
+    <sql id="buildProjectDO.count">
+		SELECT COUNT(*) FROM build_project
+    </sql>
+    <!-- END counter -->
+
+    <sql id="buildProjectDO.get_segment">
+        <dynamic prepend="WHERE">
+            <isNotNull prepend="AND" property="id">
+                id = #id#
+            </isNotNull>
+            <isNotNull prepend="AND" property="projectName">
+                project_name = #projectName#
+            </isNotNull>
+            <isNotNull prepend="AND" property="jenkinsProjectBuildNumber">
+                jenkins_project_build_number = #jenkinsProjectBuildNumber#
+            </isNotNull>
+            <isNotNull prepend="AND" property="status">
+                status = #status#
+            </isNotNull>
+            <isNotNull prepend="AND" property="projectId">
+                project_id = #projectId#
+            </isNotNull>
+            <isNotNull prepend="AND" property="buildPipelineId">
+                build_pipeline_id = #buildPipelineId#
+            </isNotNull>
+            <isNotNull prepend="AND" property="result">
+                result = #result#
+            </isNotNull>
+            <isNotNull prepend="AND" property="duration">
+                duration = #duration#
+            </isNotNull>
+            <isNotNull prepend="AND" property="testReportId">
+                test_report_id = #testReportId#
+            </isNotNull>
+            <isNotNull prepend="AND" property="codeChanges">
+                code_changes = #codeChanges#
+            </isNotNull>
+            <isNotNull prepend="AND" property="downStreamProjects">
+                down_stream_projects = #downStreamProjects#
+            </isNotNull>
+            <isNotNull prepend="AND" property="comment">
+                comment = #comment#
+            </isNotNull>
+            <isNotNull prepend="AND" property="description">
+                description = #description#
+            </isNotNull>
+            <isNotNull prepend="AND" property="gmtStart">
+                gmt_start = #gmtStart#
+            </isNotNull>
+            <isNotNull prepend="AND" property="gmtEnd">
+                gmt_end = #gmtEnd#
+            </isNotNull>
+        </dynamic>
+    </sql>
+
+    <!-- INSERT -->
+    <insert id="create" parameterClass="buildProjectDO">
+        INSERT INTO build_project (
+        status,project_name, project_id,jenkins_project_build_number, build_pipeline_id,result,duration,
+        test_report_id,code_changes,down_stream_projects,comment, description, gmt_start, gmt_end, gmt_create,
+        gmt_modified)
+        VALUES(
+        #status#, #projectName#,#projectId#,#jenkinsProjectBuildNumber#,
+        #buildPipelineId#,#result#,#duration#,#testReportId#,#codeChanges#,#downStreamProjects#, #comment#,
+        #description#,#gmtStart#, #gmtEnd#, now(), now())
+        <selectKey resultClass="long" keyProperty="id">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <!-- ENE INSERT -->
+
+    <!-- update -->
+    <update id="update" parameterClass="buildProjectDO">
+        UPDATE build_project
+        set gmt_modified = now()
+        <dynamic>
+            <isNotNull prepend="," property="projectName">
+                project_name = #projectName#
+            </isNotNull>
+            <isNotNull prepend="," property="projectId">
+                project_id = #projectId#
+            </isNotNull>
+            <isNotNull prepend="," property="jenkinsProjectBuildNumber">
+                jenkins_project_build_number = #jenkinsProjectBuildNumber#
+            </isNotNull>
+            <isNotNull prepend="," property="buildPipelineId">
+                build_pipeline_id = #buildPipelineId#
+            </isNotNull>
+            <isNotNull prepend="," property="testReportId">
+                test_report_id = #testReportId#
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                status = #status#
+            </isNotNull>
+            <isNotNull prepend="," property="result">
+                result = #result#
+            </isNotNull>
+            <isNotNull prepend="," property="duration">
+                duration = #duration#
+            </isNotNull>
+            <isNotNull prepend="," property="codeChanges">
+                code_changes = #codeChanges#
+            </isNotNull>
+            <isNotNull prepend="," property="downStreamProjects">
+                down_stream_projects = #downStreamProjects#
+            </isNotNull>
+
+            <isNotNull prepend="," property="comment">
+                comment = #comment#
+            </isNotNull>
+            <isNotNull prepend="," property="description">
+                description = #description#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtStart">
+                gmt_start = #gmtStart#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtEnd">
+                gmt_end = #gmtEnd#
+            </isNotNull>
+        </dynamic>
+        where id = #id#
+    </update>
+
+
+    <!-- GET -->
+    <select id="load" resultMap="buildProjectDO.rm">
+        <include refid="buildProjectDO.selector"/>
+        WHERE ID = #id#
+    </select>
+
+    <select id="find" parameterClass="buildProjectDO" resultMap="buildProjectDO.rm">
+        <include refid="buildProjectDO.selector"/>
+        <include refid="buildProjectDO.get_segment"/>
+    </select>
+    <!-- END GET -->
+
+    <delete id="delete" parameterClass="long">
+    	DELETE FROM build_project where id = #id#
+    </delete>
+
+    <select id="page_count" resultClass="Integer">
+        <include refid="buildProjectDO.count"/>
+        <include refid="buildProjectDO.get_segment"/>
+    </select>
+
+    <select id="page" resultClass="Integer" resultMap="buildProjectDO.rm">
+        <include refid="buildProjectDO.selector"/>
+        <include refid="buildProjectDO.get_segment"/>
+        LIMIT #query_page_index#, #query_page_size#;
+    </select>
+</sqlMap>
+

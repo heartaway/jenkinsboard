@@ -54,7 +54,7 @@ public class JenkinsServerIntegration {
 
     @Test
     public void shouldReturnDetailOfComputer() throws Exception {
-        Map<String, Computer> computers =  server.getComputers();
+        Map<String, Computer> computers = server.getComputers();
         assertTrue(computers.get("master").details().getDisplayName().equals("master"));
     }
 
@@ -67,7 +67,7 @@ public class JenkinsServerIntegration {
     // description for the instance of jenkins you are running.
     @Test
     public void testGetJobXml() throws Exception {
-        final String jobName = "deploycenter";
+        final String jobName = "taegrid-trunk";
 
         String xmlReturned = server.getJobXml(jobName);
 
@@ -80,8 +80,8 @@ public class JenkinsServerIntegration {
 
         JobWithDetails job = server.getJob(jobName);
 
-        assertEquals("trunk",job.getName());
-        assertEquals("trunk",job.getDisplayName());
+        assertEquals("trunk", job.getName());
+        assertEquals("trunk", job.getDisplayName());
     }
 
     @Test
@@ -91,6 +91,21 @@ public class JenkinsServerIntegration {
         JobWithDetails job = server.getJob(jobName);
 
         assertEquals(null, job);
+    }
+
+    @Test
+    public void testTriggerJob() throws Exception {
+        final String jobName = "business-sitemodule";
+//        String result = server.buildJob(jobName);
+        server.getJob(jobName).build();
+    }
+
+    @Test
+    public void testTriggerJobaa() throws Exception {
+        final String jobName = "juae-tomcat-sdk";
+        System.out.println(server.getJob(jobName).getLastBuild().getNumber());
+        BuildWithDetails buildWithDetails = server.getJob(jobName).getLastBuild().details();
+        System.out.println(buildWithDetails);
     }
 
     // Note this test depends upon the "pr" job existing and successfully building
@@ -139,12 +154,14 @@ public class JenkinsServerIntegration {
     private class PerformPollingTest implements Callable<Void> {
         private final JenkinsServer server;
         private final String jobName;
+
         public PerformPollingTest(JenkinsServer server, String jobName) {
             this.server = server;
             this.jobName = jobName;
         }
+
         public Void call() throws InterruptedException, IOException {
-            while(true) {
+            while (true) {
                 Thread.sleep(500);
                 JobWithDetails jwd = server.getJobs().get(jobName).details();
 

@@ -20,12 +20,24 @@ public interface PipelineService {
     public List<PipelineDO> findPipelinesByGroupId(Integer groupId);
 
     /**
+     * 根据pipelineId 查找 PipelineDO
+     * @param pipelineId
+     * @return
+     */
+    public PipelineDO findPipelineById(Integer pipelineId);
+    /**
      * 添加 Pipeline
      *
      * @param pipelineDO
      * @return 返回创建后的Pipeline id
      */
     public Integer addPipeline(PipelineDO pipelineDO);
+
+    /**
+     * 初始化Pipeline
+     * @param pipelineId
+     */
+    public void initPipeline(Integer pipelineId);
 
     /**
      * 更新 Pipeline

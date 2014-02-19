@@ -31,14 +31,14 @@ public class Job extends BaseModel {
     }
 
     public JobWithDetails details() throws IOException {
-        return client.get(url, JobWithDetails.class);
+        return client.getApi(url, JobWithDetails.class);
     }
 
     /**
      * Trigger a build without parameters
      */
     public void build() throws IOException {
-        client.post(url + "build");
+        client.get(url + "build");
     }
 
     /**

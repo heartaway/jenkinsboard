@@ -26,6 +26,11 @@ public class PipelineGroupDO extends BaseDO {
      */
     private String features;
 
+    /**
+     * 是否展示在Pipelines中
+     */
+    private Boolean display;
+
     public Integer getId() {
         return id;
     }
@@ -56,5 +61,13 @@ public class PipelineGroupDO extends BaseDO {
 
     public void setFeatures(String features) {
         this.features = features;
+    }
+
+    public Boolean getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Boolean display) {
+        this.display = display;
     }
 }

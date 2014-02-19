@@ -32,8 +32,8 @@ public class JenkinsServer {
     /**
      * Create a new Jenkins server reference given the address and credentials
      *
-     * @param serverUri address of jenkins server (ex. http://localhost:8080/jenkins)
-     * @param username username to use when connecting
+     * @param serverUri       address of jenkins server (ex. http://localhost:8080/jenkins)
+     * @param username        username to use when connecting
      * @param passwordOrToken password (not recommended) or token (recommended)
      */
     public JenkinsServer(URI serverUri, String username, String passwordOrToken) {
@@ -56,7 +56,7 @@ public class JenkinsServer {
      * @throws java.io.IOException
      */
     public Map<String, Job> getJobs() throws IOException {
-        List<Job> jobs = client.get("/", MainView.class).getJobs();
+        List<Job> jobs = client.getApi("/", MainView.class).getJobs();
         return Maps.uniqueIndex(jobs, new Function<Job, String>() {
             @Override
             public String apply(Job job) {
@@ -72,19 +72,52 @@ public class JenkinsServer {
      * @return A single Job, null if not present
      * @throws java.io.IOException
      */
-    public JobWithDetails getJob(String jobName) throws  IOException {
+    public JobWithDetails getJob(String jobName) throws IOException {
         try {
-            JobWithDetails job = client.get("/job/"+encode(jobName),JobWithDetails.class);
+            JobWithDetails job = client.getApi("/job/" + encode(jobName), JobWithDetails.class);
             job.setClient(client);
 
             return job;
         } catch (HttpResponseException e) {
-            if(e.getStatusCode() == 404) {
+            if (e.getStatusCode() == 404) {
                 return null;
             }
             throw e;
         }
 
+    }
+
+    /**
+     * 通过JobName 获取 此 job 下游 工程构建触发阀值
+     *
+     * @param jobName
+     * @return
+     * @throws IOException
+     */
+    public TriggerThreshold getChildJobTriggerThreshold(String jobName) throws IOException {
+        String jobXml = client.getApi("/job/" + encode(jobName) + "/config.xml");
+        if (jobXml == null) {
+            return TriggerThreshold.SUCCESS;
+        }
+        if (jobXml.contains("<hudson.tasks.BuildTrigger>")) {
+            jobXml = jobXml.substring(jobXml.indexOf("<hudson.tasks.BuildTrigger>"), jobXml.length());
+        }
+        if (jobXml.contains("</hudson.tasks.BuildTrigger>")) {
+            jobXml = jobXml.substring(0, jobXml.indexOf("</hudson.tasks.BuildTrigger>"));
+        }
+        if (jobXml.contains("<threshold>")) {
+            jobXml = jobXml.substring(jobXml.indexOf("<threshold>"), jobXml.length());
+        }
+        if (jobXml.contains("</threshold>")) {
+            jobXml = jobXml.substring(0, jobXml.indexOf("</threshold>"));
+        }
+        if (jobXml.contains("2")) {
+            return TriggerThreshold.FAILURE;
+        } else if (jobXml.contains("1")) {
+            return TriggerThreshold.UNSTABLE;
+        } else {
+            return TriggerThreshold.SUCCESS;
+        }
     }
 
     /**
@@ -104,7 +137,7 @@ public class JenkinsServer {
      * @throws java.io.IOException
      */
     public String getJobXml(String jobName) throws IOException {
-        return client.get("/job/" + encode(jobName) + "/config.xml");
+        return client.getApi("/job/" + encode(jobName) + "/config.xml");
     }
 
     /**
@@ -114,7 +147,7 @@ public class JenkinsServer {
      * @throws java.io.IOException
      */
     public LabelWithDetails getLabel(String labelName) throws IOException {
-        return client.get("/label/" + encode(labelName), LabelWithDetails.class);
+        return client.getApi("/label/" + encode(labelName), LabelWithDetails.class);
     }
 
 
@@ -125,7 +158,7 @@ public class JenkinsServer {
      * @throws java.io.IOException
      */
     public Map<String, Computer> getComputers() throws IOException {
-        List<Computer> computers = client.get("computer/", Computer.class).getComputers();
+        List<Computer> computers = client.getApi("computer/", Computer.class).getComputers();
         return Maps.uniqueIndex(computers, new Function<Computer, String>() {
             @Override
             public String apply(Computer computer) {
@@ -147,6 +180,10 @@ public class JenkinsServer {
 
     private String encode(String pathPart) {
         // jenkins doesn't like the + for space, use %20 instead
-        return URLEncoder.encode(pathPart).replaceAll("\\+","%20");
+        return URLEncoder.encode(pathPart).replaceAll("\\+", "%20");
+    }
+
+    public String getUrl() {
+        return client.getUrl();
     }
 }

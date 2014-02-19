@@ -4,23 +4,20 @@
 <div class="navbar">
     <div class="navbar-inner">
         <div class="container-fluid">
-            <a class="btn btn-navbar" data-toggle="collapse"
-               data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a id="main-menu-toggle" class="hidden-phone open"><i class="icon-reorder"></i></a>
-
-            <div class="row-fluid">
-                <a class="brand span2" href="../../index.html"><span>Jae Qa</span></a>
-            </div>
-
-
+            <a href="#" class="brand">
+                <small>
+                    <i class="icon-icon-cloud"></i>
+                    Ewall
+                </small>
+            </a><!--/.brand-->
         </div>
+        <!--/.container-fluid-->
     </div>
+    <!--/.navbar-inner-->
 </div>
 <!-- start: Header -->
 
-<div class="container-fluid-full">
-    <div class="row-fluid">
+<div class="main-container container-fluid">
+    <a class="menu-toggler" id="menu-toggler" href="#">
+        <span class="menu-text"></span>
+    </a>

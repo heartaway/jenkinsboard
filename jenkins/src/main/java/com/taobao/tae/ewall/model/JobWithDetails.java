@@ -26,9 +26,9 @@ public class JobWithDetails extends Job {
     public String getDisplayName() {
         return displayName;
     }
-    
+
     public boolean isBuildable() {
-    	return buildable;
+        return buildable;
     }
 
     public List<Build> getBuilds() {
@@ -44,6 +44,19 @@ public class JobWithDetails extends Job {
         Build ret = new Build(from);
         ret.setClient(client);
         return ret;
+    }
+
+    public Build getBuildByBuildNumber(Long buildNumber, String host) {
+        String url = "";
+        if (host.endsWith("/")) {
+            url = host + "job/" + this.displayName + "/" + buildNumber.toString();
+        } else {
+            url = host + "/job/" + this.displayName + "/" + buildNumber.toString();
+        }
+        if (buildNumber == null) {
+            return null;
+        }
+        return buildWithClient(new Build(buildNumber.intValue(), url));
     }
 
     public Build getLastBuild() {

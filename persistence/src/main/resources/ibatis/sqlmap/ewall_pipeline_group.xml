@@ -7,12 +7,13 @@
         <result column="name" property="name"/>
         <result column="features" property="features"/>
         <result column="description" property="description"/>
+        <result column="display" property="display"/>
     </resultMap>
 
     <!-- selector -->
     <sql id="pipelineGroupDO.selector">
 		SELECT
-		id, name, features, description
+		id, name, features, description,display
 		FROM pipeline_group
     </sql>
     <!-- END selector -->
@@ -38,15 +39,18 @@
             <isNotNull prepend="AND" property="description">
                 description = #description#
             </isNotNull>
+            <isNotNull prepend="AND" property="display">
+                display = #display#
+            </isNotNull>
         </dynamic>
     </sql>
 
     <!-- INSERT -->
     <insert id="create" parameterClass="pipelineGroupDO">
         INSERT INTO pipeline_group(
-        name, features, description, gmt_create, gmt_modified)
+        name, features, description, display,gmt_create, gmt_modified)
         VALUES(
-        #name#, #features#, #description#, now(), now())
+        #name#, #features#, #description#,#display#, now(), now())
         <selectKey resultClass="int" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -66,6 +70,9 @@
             </isNotNull>
             <isNotNull prepend="," property="description">
                 description = #description#
+            </isNotNull>
+            <isNotNull prepend="," property="display">
+                display = #display#
             </isNotNull>
         </dynamic>
         where id = #id#

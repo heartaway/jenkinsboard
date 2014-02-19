@@ -2,7 +2,6 @@ package com.taobao.tae.ewall.dao;
 
 import com.taobao.itest.ITestSpringContextBaseCase;
 import com.taobao.itest.annotation.ITestSpringContext;
-import com.taobao.tae.ewall.job.JobDO;
 import com.taobao.tae.ewall.pipeline.PipelineGroupDO;
 import junit.framework.Assert;
 import org.junit.Test;

@@ -1,9 +1,7 @@
 package com.taobao.tae.ewall.dashboard.pipeline;
 
 
-import com.taobao.tae.ewall.job.JobDO;
 import com.taobao.tae.ewall.pipeline.PipelineGroupDO;
-import com.taobao.tae.ewall.service.JobService;
 import com.taobao.tae.ewall.service.PipelineGroupService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -35,11 +33,12 @@ public class PipelineGroupController {
 
 
     @RequestMapping(value = "groupadd", method = RequestMethod.POST)
-    public String addGroup(String name, String description, ModelMap model) {
+    public String addGroup(String name, String description, String display, ModelMap model) {
         if (StringUtils.isNotBlank(name)) {
             PipelineGroupDO groupDO = new PipelineGroupDO();
             groupDO.setName(name);
             groupDO.setDescription(description);
+            groupDO.setDisplay(Boolean.valueOf(display));
             Integer result = pipelineGroupService.addGroup(groupDO);
             model.addAttribute("addGroupResult", result);
         }
@@ -58,12 +57,13 @@ public class PipelineGroupController {
     }
 
     @RequestMapping(value = "groupedit", method = RequestMethod.POST)
-    public String editGroup(Integer id, String name, String description, ModelMap model) {
+    public String editGroup(Integer id, String name, String description, String display, ModelMap model) {
         if (id != null && StringUtils.isNotBlank(name)) {
             PipelineGroupDO groupDO = new PipelineGroupDO();
             groupDO.setId(id);
             groupDO.setName(name);
             groupDO.setDescription(description);
+            groupDO.setDisplay(Boolean.valueOf(display));
             Boolean result = pipelineGroupService.updateGroup(groupDO);
             model.addAttribute("editGroupResult", result);
         }
