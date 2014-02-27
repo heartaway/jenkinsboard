@@ -1,6 +1,9 @@
 package com.taobao.tae.ewall.service.impl;
 
+import com.taobao.tae.ewall.build.BuildTestReportDO;
+import com.taobao.tae.ewall.dao.BuildTestReportDao;
 import com.taobao.tae.ewall.service.BuildTestReportService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,4 +13,12 @@ import org.springframework.stereotype.Component;
  */
 @Component("buildTestReportService")
 public class BuildTestReportServiceImpl implements BuildTestReportService {
+
+    @Autowired
+    BuildTestReportDao buildTestReportDao;
+
+    @Override
+    public Long create(BuildTestReportDO buildTestReportDO) {
+        return buildTestReportDao.create(buildTestReportDO);
+    }
 }

@@ -17,7 +17,7 @@ public enum BuildResult {
     BUILDING(3, "构建中"),
     REBUILDING(4, "重新构建中"),
     ABORTED(5, "被中断"),
-    NOT_BUILT(6,"没有构建"),
+    NOT_BUILT(6,"初始化"),
     UNKNOWN(7, "未知");
 
     Integer code;

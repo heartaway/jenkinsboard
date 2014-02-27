@@ -3,17 +3,18 @@ package com.taobao.tae.ewall.dashboard.polling;
 import com.taobao.tae.ewall.JenkinsServer;
 import com.taobao.tae.ewall.build.BuildPipelineDO;
 import com.taobao.tae.ewall.build.BuildProjectDO;
+import com.taobao.tae.ewall.build.BuildTestReportDO;
 import com.taobao.tae.ewall.client.JenkinsHttpClient;
 import com.taobao.tae.ewall.dao.ResourcesLockDao;
 import com.taobao.tae.ewall.lock.Resources;
-import com.taobao.tae.ewall.model.BuildResult;
-import com.taobao.tae.ewall.model.BuildStatus;
-import com.taobao.tae.ewall.model.BuildWithDetails;
-import com.taobao.tae.ewall.model.TriggerThreshold;
+import com.taobao.tae.ewall.model.*;
 import com.taobao.tae.ewall.service.BuildPipelineService;
 import com.taobao.tae.ewall.service.BuildProjectService;
+import com.taobao.tae.ewall.service.BuildTestReportService;
 import com.taobao.tae.ewall.service.ResourcesLockService;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URI;
@@ -40,6 +41,8 @@ public class PipelinePerfomPolling implements Callable<Void> {
     private BuildPipelineService buildPipelineService;
 
     private ResourcesLockService resourcesLockService;
+
+    private BuildTestReportService buildTestReportService;
 
     public PipelinePerfomPolling(Long buildPipelineId, String startProjectName) {
         this.buildPipelineId = buildPipelineId;
@@ -73,7 +76,7 @@ public class PipelinePerfomPolling implements Callable<Void> {
             BuildWithDetails buildWithDetails = future.get(7200, TimeUnit.SECONDS);
             if (future.isDone()) {
                 //数据本次构建信息持久化。
-                buildResultPersistence(buildProjectDO, buildWithDetails);
+                buildResultPersistence(buildProjectDO, buildWithDetails, jenkinsUrl);
                 //如果 任务在Jenkins中被终止，则停止构建其后续Job
                 if (buildWithDetails.getResult().getCode() == BuildResult.ABORTED.getCode()) {
                     return;
@@ -106,18 +109,46 @@ public class PipelinePerfomPolling implements Callable<Void> {
     }
 
     /**
-     * 持久化 构建结果信息
+     * 持久化 构建结果信息 ,包括 工程构建信息和测试结果信息。
      *
      * @param buildProjectDO
      * @param buildWithDetails
      * @return
      */
-    public Boolean buildResultPersistence(BuildProjectDO buildProjectDO, BuildWithDetails buildWithDetails) {
+    public Boolean buildResultPersistence(BuildProjectDO buildProjectDO, BuildWithDetails buildWithDetails, String jenkinsUrl) {
         buildProjectDO.setResult(buildWithDetails.getResult().getCode().toString());
-        buildProjectDO.setDuration(buildWithDetails.getDuration());
+        buildProjectDO.setDuration(buildDurationHandle(Integer.valueOf(buildWithDetails.getDuration())));
         buildProjectDO.setStatus(BuildStatus.STOP.getCode().toString());
         buildProjectDO.setDescription(buildWithDetails.getDescription());
-        return buildProjectService.update(buildProjectDO);
+        buildProjectService.update(buildProjectDO);
+        try {
+            JenkinsHttpClient client = new JenkinsHttpClient(new URI(jenkinsUrl));
+            JenkinsServer server = new JenkinsServer(client);
+            TestReport testReport = server.getTestReport(buildProjectDO.getProjectName(), buildProjectDO.getJenkinsProjectBuildNumber());
+            if (testReport == null) {
+                return Boolean.FALSE;
+            }
+            BuildTestReportDO buildTestReportDO = new BuildTestReportDO();
+            buildTestReportDO.setBuildProjectId(buildProjectDO.getId());
+            buildTestReportDO.setDuration(buildDurationHandle(Integer.valueOf(buildWithDetails.getDuration())));
+            buildTestReportDO.setFailCount(testReport.getFailCount());
+            buildTestReportDO.setSkipCount(testReport.getSkipCount());
+            buildTestReportDO.setTotalCount(testReport.getTotalCount());
+            if (testReport.getChildReports() != null && testReport.getChildReports().get(0).getChild() != null) {
+                buildTestReportDO.setNumber(testReport.getChildReports().get(0).getChild().getNumber());
+            }
+            if (testReport.getChildReports() != null && testReport.getChildReports().get(0).getChild() != null) {
+                buildTestReportDO.setUrl(testReport.getChildReports().get(0).getChild().getUrl());
+            }
+            if (testReport.getChildReports() != null) {
+                JSONObject jsonObject = JSONObject.fromObject(testReport);
+                buildTestReportDO.setTestReport(jsonObject.toString());
+            }
+            buildTestReportService.create(buildTestReportDO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Boolean.TRUE;
     }
 
     /**
@@ -178,6 +209,40 @@ public class PipelinePerfomPolling implements Callable<Void> {
     }
 
 
+    public String buildDurationHandle(Integer duration) {
+        String time = "";
+        if (duration / 3600000 > 0) {
+            //大于 1小时
+            time = String.valueOf(duration / 3600000);
+            time = time + " 小时";
+            duration = duration % 3600000;
+            if (duration / 60000 > 0) {
+                //大于 1 分钟
+                time = time + String.valueOf(duration / 60000);
+                time = time + " 分";
+                duration = duration % 60000;
+                time = time + String.valueOf(duration / 1000);
+                time = time + " 秒";
+            } else {
+                time = time + String.valueOf(duration / 1000);
+                time = time + " 秒";
+            }
+        } else {
+            if (duration / 60000 > 0) {
+                //大于 1 分钟   且 小于等于 1小时
+                time = String.valueOf(duration / 60000);
+                time = time + " 分";
+                duration = duration % 60000;
+                time = time + String.valueOf(duration / 1000);
+                time = time + " 秒";
+            } else {
+                time = String.valueOf(duration / 1000);
+                time = time + " 秒";
+            }
+        }
+        return time;
+    }
+
     public void setBuildProjectService(BuildProjectService buildProjectService) {
         this.buildProjectService = buildProjectService;
     }
@@ -189,4 +254,13 @@ public class PipelinePerfomPolling implements Callable<Void> {
     public void setResourcesLockService(ResourcesLockService resourcesLockService) {
         this.resourcesLockService = resourcesLockService;
     }
+
+    public BuildTestReportService getBuildTestReportService() {
+        return buildTestReportService;
+    }
+
+    public void setBuildTestReportService(BuildTestReportService buildTestReportService) {
+        this.buildTestReportService = buildTestReportService;
+    }
+
 }

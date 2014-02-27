@@ -5,6 +5,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.taobao.tae.ewall.client.JenkinsHttpClient;
 import com.taobao.tae.ewall.model.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpResponseException;
 
 import java.io.IOException;
@@ -76,7 +77,6 @@ public class JenkinsServer {
         try {
             JobWithDetails job = client.getApi("/job/" + encode(jobName), JobWithDetails.class);
             job.setClient(client);
-
             return job;
         } catch (HttpResponseException e) {
             if (e.getStatusCode() == 404) {
@@ -86,6 +86,27 @@ public class JenkinsServer {
         }
 
     }
+
+    /**
+     * 获取测试报告
+     *
+     * @throws IOException
+     */
+    public TestReport getTestReport(String jobName, Long buildNumber) throws IOException {
+        try {
+            if (StringUtils.isBlank(jobName) || buildNumber == null) {
+                return null;
+            }
+            TestReport testReport = client.getApi("/job/" + encode(jobName) + "/" + buildNumber.toString() + "/testReport/", TestReport.class);
+            return testReport;
+        } catch (HttpResponseException e) {
+            if (e.getStatusCode() == 404) {
+                return null;
+            }
+            throw e;
+        }
+    }
+
 
     /**
      * 通过JobName 获取 此 job 下游 工程构建触发阀值

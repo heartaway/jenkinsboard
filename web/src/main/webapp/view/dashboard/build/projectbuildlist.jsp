@@ -63,7 +63,7 @@
                         </td>
                         <td>
                             <c:if test="${buildProject.getStatus() == 0}">
-                                未启动
+                                未运行
                             </c:if>
                             <c:if test="${buildProject.getStatus() == 1}">
                                 运行中...
@@ -89,7 +89,7 @@
                                 <span class="badge badge-grey">被中断</span>
                             </c:if>
                             <c:if test="${buildProject.getResult() == 6}">
-                                <span class="badge badge-inverse">未构建</span>
+                                <span class="badge badge-inverse"></span>
                             </c:if>
                             <c:if test="${buildProject.getResult() == 7}">
                                 <span class="badge badge-inverse">未知</span>

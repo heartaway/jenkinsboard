@@ -11,6 +11,9 @@ public class BuildTestReportDO {
 
     private Long id;
 
+    // 工程构建编号
+    private Long buildProjectId;
+
     //在Jenkins中的构建编号
     private Long number;
 
@@ -26,11 +29,11 @@ public class BuildTestReportDO {
     //运行失败的测试用例数
     private Integer failCount;
 
-    //测试所话费时间
+    //测试所花费时间
     private String duration;
 
-    //具体构建方法测试信息
-    private String suites;
+    //具体构建结果报告
+    private String testReport;
 
     //创建时间
     private Date gmtCreate;
@@ -44,6 +47,14 @@ public class BuildTestReportDO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getBuildProjectId() {
+        return buildProjectId;
+    }
+
+    public void setBuildProjectId(Long buildProjectId) {
+        this.buildProjectId = buildProjectId;
     }
 
     public Long getNumber() {
@@ -94,12 +105,12 @@ public class BuildTestReportDO {
         this.duration = duration;
     }
 
-    public String getSuites() {
-        return suites;
+    public String getTestReport() {
+        return testReport;
     }
 
-    public void setSuites(String suites) {
-        this.suites = suites;
+    public void setTestReport(String testReport) {
+        this.testReport = testReport;
     }
 
     public Date getGmtCreate() {

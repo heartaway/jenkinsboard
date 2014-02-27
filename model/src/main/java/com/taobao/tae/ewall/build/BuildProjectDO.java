@@ -33,7 +33,7 @@ public class BuildProjectDO {
     private String result;
 
     // 持续 构建时长
-    private Integer duration;
+    private String duration;
 
     //代码变更
     private String codeChanges;
@@ -123,11 +123,11 @@ public class BuildProjectDO {
         this.result = result;
     }
 
-    public Integer getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 

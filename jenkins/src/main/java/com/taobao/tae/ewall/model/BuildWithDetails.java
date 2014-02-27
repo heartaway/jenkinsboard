@@ -19,7 +19,7 @@ public class BuildWithDetails extends Build {
     List actions;
     boolean building;
     String description;
-    int duration;
+    String duration;
     String fullDisplayName;
     String id;
     long timestamp;
@@ -38,7 +38,7 @@ public class BuildWithDetails extends Build {
         return description;
     }
 
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 

@@ -112,7 +112,7 @@
 
                                                                                 <!-- 构建结果： 失败 -->
                                                                                 <c:if test="${pipelineBuild.getBuildGrid().getData().get(row).get(col).getResult() == 0}">
-                                                                                    <div   id="projectBuild_${pipelineBuild.getBuildGrid().getData().get(row).get(col).getId()}" class="progress progress-danger progress-striped"
+                                                                                    <div   id="projectBuild_${pipelineBuild.getBuildGrid().getData().get(row).get(col).getId()}" class="progress progress-danger"
                                                                                          style="margin-bottom: 10px;">
                                                                                         <div class="bar"
                                                                                              style="width: 100%;"></div>
@@ -121,7 +121,7 @@
 
                                                                                 <!-- 构建结果： 成功 -->
                                                                                 <c:if test="${pipelineBuild.getBuildGrid().getData().get(row).get(col).getResult() == 1}">
-                                                                                    <div   id="projectBuild_${pipelineBuild.getBuildGrid().getData().get(row).get(col).getId()}" class="progress progress-success progress-striped"
+                                                                                    <div   id="projectBuild_${pipelineBuild.getBuildGrid().getData().get(row).get(col).getId()}" class="progress progress-success"
                                                                                          style="margin-bottom: 10px;">
                                                                                         <div class="bar"
                                                                                              style="width: 100%;"></div>
@@ -130,7 +130,7 @@
 
                                                                                 <!-- 构建结果： 不稳定 -->
                                                                                 <c:if test="${pipelineBuild.getBuildGrid().getData().get(row).get(col).getResult() == 2}">
-                                                                                    <div   id="projectBuild_${pipelineBuild.getBuildGrid().getData().get(row).get(col).getId()}" class="progress progress-warning progress-striped"
+                                                                                    <div   id="projectBuild_${pipelineBuild.getBuildGrid().getData().get(row).get(col).getId()}" class="progress progress-warning"
                                                                                          style="margin-bottom: 10px;">
                                                                                         <div class="bar"
                                                                                              style="width: 100%;"></div>

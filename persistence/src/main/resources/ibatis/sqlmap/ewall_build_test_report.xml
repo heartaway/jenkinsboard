@@ -4,19 +4,20 @@
     <typeAlias alias="buildTestReportDO" type="com.taobao.tae.ewall.build.BuildTestReportDO"/>
     <resultMap id="buildTestReportDO.rm" class="buildTestReportDO">
         <result column="id" property="id"/>
+        <result column="build_project_id" property="buildProjectId"/>
         <result column="number" property="number"/>
         <result column="total_count" property="totalCount"/>
         <result column="skip_count" property="skipCount"/>
         <result column="url" property="url"/>
         <result column="fail_count" property="failCount"/>
         <result column="duration" property="duration"/>
-        <result column="suites" property="suites"/>
+        <result column="test_report" property="testReport"/>
     </resultMap>
 
     <!-- selector -->
     <sql id="buildTestReportDO.selector">
 		SELECT
-		id, number, total_count, skip_count,url,fail_count,duration,, suites
+		id, build_project_id,number, total_count, skip_count,url,fail_count,duration, test_report
 		FROM build_test_report
     </sql>
     <!-- END selector -->
@@ -31,6 +32,9 @@
         <dynamic prepend="WHERE">
             <isNotNull prepend="AND" property="id">
                 id = #id#
+            </isNotNull>
+            <isNotNull prepend="AND" property="buildProjectId">
+                build_project_id = #buildProjectId#
             </isNotNull>
             <isNotNull prepend="AND" property="number">
                 number = #number#
@@ -50,8 +54,8 @@
             <isNotNull prepend="AND" property="duration">
                 duration = #duration#
             </isNotNull>
-            <isNotNull prepend="AND" property="suites">
-                suites = #suites#
+            <isNotNull prepend="AND" property="testReport">
+                test_report = #testReport#
             </isNotNull>
         </dynamic>
     </sql>
@@ -59,9 +63,9 @@
     <!-- INSERT -->
     <insert id="create" parameterClass="buildTestReportDO">
         INSERT INTO build_test_report (
-        number, total_count, skip_count,url, fail_count,duration, suites, gmt_create, gmt_modified)
+        build_project_id, number, total_count, skip_count,url, fail_count,duration, test_report, gmt_create, gmt_modified)
         VALUES(
-        #number#, #totalCount#, #skipCount#,#url#,#failCount#,#duration#, #suites#, now(), now())
+        #buildProjectId#,#number#, #totalCount#, #skipCount#,#url#,#failCount#,#duration#, #testReport#, now(), now())
         <selectKey resultClass="long" keyProperty="id">
             SELECT LAST_INSERT_ID() AS ID
         </selectKey>
@@ -75,6 +79,9 @@
         <dynamic>
             <isNotNull prepend="," property="number">
                 number = #number#
+            </isNotNull>
+            <isNotNull prepend="," property="buildProjectId">
+                build_project_id = #buildProjectId#
             </isNotNull>
             <isNotNull prepend="," property="totalCount">
                 total_count = #totalCount#
@@ -91,8 +98,8 @@
             <isNotNull prepend="," property="failCount">
                 fail_count = #failCount#
             </isNotNull>
-            <isNotNull prepend="," property="suites">
-                suites = #suites#
+            <isNotNull prepend="," property="testReport">
+                test_report = #testReport#
             </isNotNull>
         </dynamic>
         where id = #id#

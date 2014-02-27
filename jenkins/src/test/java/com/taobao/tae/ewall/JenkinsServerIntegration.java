@@ -59,6 +59,13 @@ public class JenkinsServerIntegration {
     }
 
     @Test
+    public void getTestReport() throws Exception{
+        final String jobName = "deploycenter";
+        TestReport testReport = server.getTestReport(jobName, 962L);
+        System.out.println(testReport);
+    }
+
+    @Test
     public void shouldReturnDetailOfLablel() throws Exception {
         assertTrue(server.getLabel("tae-138").getName().equals("tae"));
     }

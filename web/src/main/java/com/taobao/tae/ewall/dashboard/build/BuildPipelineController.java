@@ -44,8 +44,11 @@ public class BuildPipelineController {
     @Resource
     PipelineService pipelineService;
 
-    @Autowired
+    @Resource
     ResourcesLockService resourcesLockService;
+
+    @Resource
+    BuildTestReportService buildTestReportService;
 
     private ExecutorService pipelineExecutor = Executors.newFixedThreadPool(10);
 
@@ -89,6 +92,7 @@ public class BuildPipelineController {
         pipelinePerfomPolling.setBuildPipelineService(buildPipelineService);
         pipelinePerfomPolling.setBuildProjectService(buildProjectService);
         pipelinePerfomPolling.setResourcesLockService(resourcesLockService);
+        pipelinePerfomPolling.setBuildTestReportService(buildTestReportService);
         pipelineExecutor.submit(pipelinePerfomPolling);
         return "redirect:/dashboard/build/pipelineslastbuild";
     }
